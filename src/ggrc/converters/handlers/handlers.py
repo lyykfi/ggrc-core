@@ -470,12 +470,17 @@ class MappingColumnHandler(ColumnHandler):
 
     for slug in slugs:
       obj = class_.query.filter_by(slug=slug).first()
+
       if obj:
         is_allowed_by_type = self._is_allowed_mapping_by_type(
             source_type=self.row_converter.obj.__class__.__name__,
-            destination_type=class_.__name__
+            destination_type=class_.__name__,
         )
         if not is_allowed_by_type:
+          self._add_allowed_mapping_warning(
+            source=self.row_converter.obj,
+            destination=obj,
+          )
           continue
         if not permissions.is_allowed_update_for(obj):
           self.add_warning(
@@ -499,19 +504,27 @@ class MappingColumnHandler(ColumnHandler):
       self.add_error(errors.MISSING_VALUE_ERROR, column_name=self.display_name)
     return objects
 
+  def _add_allowed_mapping_warning(self, source, destination):
+    """Add warning if we will be have changes """
+    mapping = all_models.Relationship.find_related(source, destination)
+
+    if (self.unmap and mapping) or (not self.unmap and not mapping):
+      self.add_warning(
+        errors.MAPPING_SCOPING_ERROR,
+        object_type=destination.__class__.__name__,
+        action="unmap" if self.unmap else "map"
+      )
+
+
   def _is_allowed_mapping_by_type(self, source_type, destination_type):
     """Checks if a mapping is allowed between given types."""
     scoping_models_names = [m.__name__ for m in all_models.all_models
                             if issubclass(m, ScopeObject)]
+
     if source_type in scoping_models_names and \
        destination_type in ("Regulation", "Standard") or \
        destination_type in scoping_models_names and \
        source_type in ("Regulation", "Standard"):
-      self.add_warning(
-          errors.MAPPING_SCOPING_ERROR,
-          object_type=destination_type,
-          action="unmap" if self.unmap else "map"
-      )
       return False
     return True
 

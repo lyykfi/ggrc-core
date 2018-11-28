@@ -505,7 +505,7 @@ class MappingColumnHandler(ColumnHandler):
     return objects
 
   def _add_allowed_mapping_warning(self, source, destination):
-    """Add warning if we will be have changes """
+    """Add warning if we have changes mappings """
     mapping = all_models.Relationship.find_related(source, destination)
 
     if (self.unmap and mapping) or (not self.unmap and not mapping):

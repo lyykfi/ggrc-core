@@ -89,7 +89,7 @@ MAPPING_SCOPING_ERROR = (u"Line {line}: You do not have the necessary "
                          u"permissions to {action} scoping objects to "
                          u"directives in this application. Please contact "
                          u"your administrator if you have any questions. "
-                         u"Column 'map:{object_type}' will be ignored.")
+                         u"Column '{action}:{object_type}' will be ignored.")
 
 DELETE_NEW_OBJECT_ERROR = (u"Line {line}: Tried to create and delete the same"
                            " object {object_type}: {slug} in one import.")

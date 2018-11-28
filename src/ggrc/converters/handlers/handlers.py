@@ -477,7 +477,7 @@ class MappingColumnHandler(ColumnHandler):
             destination_type=class_.__name__,
         )
         if not is_allowed_by_type:
-          self._add_allowed_mapping_warning(
+          self._add_mapping_warning(
             source=self.row_converter.obj,
             destination=obj,
           )
@@ -504,7 +504,7 @@ class MappingColumnHandler(ColumnHandler):
       self.add_error(errors.MISSING_VALUE_ERROR, column_name=self.display_name)
     return objects
 
-  def _add_allowed_mapping_warning(self, source, destination):
+  def _add_mapping_warning(self, source, destination):
     """Add warning if we have changes mappings """
     mapping = all_models.Relationship.find_related(source, destination)
 

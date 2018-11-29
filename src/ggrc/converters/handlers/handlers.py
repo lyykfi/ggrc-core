@@ -515,6 +515,10 @@ class MappingColumnHandler(ColumnHandler):
         action="unmap" if self.unmap else "map"
       )
 
+      return True
+
+    return False
+
 
   def _is_allowed_mapping_by_type(self, source_type, destination_type):
     """Checks if a mapping is allowed between given types."""

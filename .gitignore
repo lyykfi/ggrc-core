@@ -40,6 +40,7 @@ Session.vim
 
 # WebStorm/IntelliJ IDE config files
 .idea
+ggrc-core.iml
 
 # Sublime Text project files
 *.sublime-*
